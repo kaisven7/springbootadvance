@@ -1,4 +1,4 @@
 package com.nashtech.kpi.springbootadvance.repository;
 
-public class ShapeRepository {
+public class CarsRepository {
 }
