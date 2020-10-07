@@ -3,3 +3,7 @@ server:
 application:
   description: Demo Spring Boot Advance
   version: 1.0
+Spring:
+  h2:
+    console:
+      enabled: true
