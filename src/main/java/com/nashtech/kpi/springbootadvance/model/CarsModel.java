@@ -1,30 +1,29 @@
 package com.nashtech.kpi.springbootadvance.model;
 
 import com.nashtech.kpi.springbootadvance.entity.Cars;
-import com.nashtech.kpi.springbootadvance.entity.Colors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
-import java.util.Collection;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarsModel {
+public class CarsModel{
 
-    private String id;
+    private long id;
     private String name;
     private String model;
     private String brand;
     private String type;
-    private String seat;
+    private Integer seat;
     private String vehicleLicense;
-    private String code;
-    private long cost;
+    private Long cost;
+    private String color;
     private Timestamp createdDate;
+    private long version;
 
     public Cars toEntity(){
         return Cars.builder().id(id)
@@ -34,9 +33,9 @@ public class CarsModel {
                 .type(type)
                 .seat(seat)
                 .vehicleLicense(vehicleLicense)
-                .code(code)
                 .cost(cost)
+                .color(color)
+                .version(version)
                 .createdDate(createdDate).build();
     }
-
 }

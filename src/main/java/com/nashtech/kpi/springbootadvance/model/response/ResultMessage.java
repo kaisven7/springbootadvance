@@ -14,6 +14,8 @@ public class ResultMessage {
     private String statusCode;
     private String carName;
     private String message;
-
+    private String model;
+    private String brand;
+    private String vehicleLicense;
 
 }

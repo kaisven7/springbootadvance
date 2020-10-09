@@ -5,8 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name = "CARS")
@@ -17,8 +15,9 @@ import java.util.List;
 public class Cars {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private String id;
+    private long id;
 
     @Column(name = "NAME")
     private String name;
@@ -33,27 +32,22 @@ public class Cars {
     private String type;
 
     @Column(name = "SEAT")
-    private String seat;
+    private Integer seat;
 
     @Column(name = "VEHICLE_LICENSE")
     private String vehicleLicense;
 
-    @Column(name = "CODE")
-    private String code;
-
     @Column(name = "COST")
-    private long cost;
+    private Long cost;
 
     @Column(name = "COLOR")
-    private long colorId;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "CARS_COLORS", joinColumns = @JoinColumn(name = "CARS_COLOR")
-            , inverseJoinColumns = @JoinColumn(name = "COLORS_ID"))
-    private List<Colors> colors;
+    private String color;
 
     @Column(name = "CREATED_DATE")
     private Timestamp createdDate;
+
+    @Version
+    private long version;
 
     public CarsModel toModel(){
         return CarsModel.builder().id(id)
@@ -63,8 +57,9 @@ public class Cars {
                 .type(type)
                 .seat(seat)
                 .vehicleLicense(vehicleLicense)
-                .code(code)
                 .cost(cost)
+                .color(color)
+                .version(version)
                 .createdDate(createdDate).build();
     }
 }
