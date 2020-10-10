@@ -1,7 +1,7 @@
 server:
   port: 8080
 application:
-  description: Demo Spring Boot Advance
+  description: Demo Spring Boot Advance & Authorization Server
   version: 1.0
 Spring:
   h2:

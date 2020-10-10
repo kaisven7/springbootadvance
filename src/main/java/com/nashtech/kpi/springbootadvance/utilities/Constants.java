@@ -11,6 +11,12 @@ public class Constants {
     public static final String CREATED = "Created";
     public static final String DELETED = "Deleted";
 
+    //Resource Server Config
+    public static final String RESOURCE_ID = "resource-server-rest-api";
+    public static final String SECURED_READ_SCOPE = "#oauth2.hasScope('read')";
+    public static final String SECURED_WRITE_SCOPE = "#oauth2.hasScope('write')";
+    public static final String SECURED_PATTERN = "/secured/**";
+
     public ResultMessage created(String carName,
                                  String model,
                                  String brand,

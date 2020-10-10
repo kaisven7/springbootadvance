@@ -12,7 +12,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UsersModel {
 
+    private long id;
     private String username;
     private String password;
+    private String role;
+    private long version;
+
+    public Users toEntity() {
+        return Users.builder().id(id)
+                .username(username)
+                .password(password)
+                .role(role)
+                .version(version).build();
+    }
 
 }

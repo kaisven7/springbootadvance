@@ -1,12 +1,12 @@
 package com.nashtech.kpi.springbootadvance.entity;
 
+import com.nashtech.kpi.springbootadvance.model.UsersModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @Builder
@@ -25,8 +25,19 @@ public class Users {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "USERS_ROLES", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
-    private List<Roles> roles;
+    @Column(name = "role")
+    private String role;
 
+    @Version
+    private long version;
+
+    public UsersModel toModel() {
+        return UsersModel.builder()
+                .id(id)
+                .username(username)
+                .password(password)
+                .role(role)
+                .version(version)
+                .build();
+    }
 }
