@@ -24,7 +24,15 @@ public class UsersService {
     @Autowired
     private Utilities utils;
 
-    public List<Users> getALlUsers (){
+    public UsersRepository getUsersRepository() {
+        return usersRepository;
+    }
+
+    public void setUsersRepository(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
+    }
+
+    public List<Users> findAll (){
         return usersRepository.findAll();
     }
 
@@ -40,8 +48,11 @@ public class UsersService {
 
     public Users addNewUsers (Users users) {
         Long idFound = usersRepository.countId();
+        Users checkUser = usersRepository.findByUsername(users.getUsername()).orElseThrow(
+                () -> new UsersException(String.format("User %s already Existed!", users.getUsername())));
         users.setId(idFound + 1);
-        users.setRole("ROLE_USER"); // only need 1 user has role admin
+        users.setRole("ROLE_USER"); // create New user will default role USER
+        users.setVersion(1);
         return usersRepository.save(users);
     }
 

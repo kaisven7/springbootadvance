@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
@@ -45,8 +46,11 @@ public class CarsController {
             @ApiResponse(responseCode = "400", description = "Bad URL Request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "List Cars is Empty",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Need Access Token",
                     content = @Content)})
     @GetMapping("/listAll")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<List<CarsModel>> findAllCars() {
         List<Cars> carsList = carsService.findAllCars();
         if (carsList.isEmpty())
@@ -63,8 +67,11 @@ public class CarsController {
             @ApiResponse(responseCode = "400", description = "Bad URL Request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Input is Empty",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Need Access Token",
                     content = @Content)})
     @PostMapping("/addNewCar")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<ResultMessage> addNewCar(@RequestBody CarsModel carsModel) {
         Cars temp = carsService.addNewCars(carsModel.toEntity());
         if (temp.equals(null)) {
@@ -87,8 +94,11 @@ public class CarsController {
             @ApiResponse(responseCode = "400", description = "Bad URL Request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found Any Car",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Need Access Token",
                     content = @Content)})
     @GetMapping("/listCars/{brand}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<List<CarsModel>> findCarsByBrand(@PathVariable(name = "brand") String brand) {
         List<Cars> carsList = carsService.findCarsByBrand(brand);
         List<CarsModel> result = Arrays.asList(modelMapper.map(carsList, CarsModel[].class));
@@ -103,8 +113,11 @@ public class CarsController {
             @ApiResponse(responseCode = "400", description = "Bad URL Request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Cars Not Found",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Need Access Token",
                     content = @Content)})
     @GetMapping("/findCarsBy/{name}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<List<CarsModel>> findingCar(@PathVariable(name = "name") String carName) {
         List<Cars> cars = carsService.findCar(carName);
         List<CarsModel> result = Arrays.asList(modelMapper.map(cars, CarsModel[].class));
@@ -119,8 +132,11 @@ public class CarsController {
             @ApiResponse(responseCode = "400", description = "Bad URL Request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Cars Not Found",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Need Access Token",
                     content = @Content)})
     @GetMapping("/findCarsBy")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<CarsModel> findingCarByNameAndColor(@RequestParam(name = "name") String carName,
                                                               @RequestParam(name = "color") String color) {
         CarsModel result = carsService.findCarWithNameAndColor(carName, color).toModel();
@@ -135,8 +151,11 @@ public class CarsController {
             @ApiResponse(responseCode = "400", description = "Bad URL Request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Car Not Found",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Need Access Token",
                     content = @Content)})
     @PatchMapping("/updateCar")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<ResultMessage> updateCar(@RequestBody CarsModel carsModel,
                                                    @RequestHeader("If-Match") String eTag) {
         if (eTag.isEmpty()) {
@@ -169,8 +188,11 @@ public class CarsController {
             @ApiResponse(responseCode = "400", description = "Bad URL Request",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Car Not Found",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Only Admin Can Access",
                     content = @Content)})
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResultMessage> removeCar(@PathVariable(name = "id") Long id) {
         Cars deletedCar = carsService.deleteCar(id);
         ResultMessage result = constants.deleted(deletedCar.getName(),

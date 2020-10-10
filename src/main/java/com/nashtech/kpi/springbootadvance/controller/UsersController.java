@@ -52,7 +52,7 @@ public class UsersController {
     @GetMapping("/listAll")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<UsersModel>> findAllUser() {
-        List<Users> listUser = usersService.getALlUsers();
+        List<Users> listUser = usersService.findAll();
         if(listUser.isEmpty()) {
             throw new UsersException("Users is empty!!!");
         }
@@ -108,7 +108,7 @@ public class UsersController {
         }
     }
 
-    @Operation(summary = "Update User")
+    @Operation(summary = "Delete User")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found User",
                     content = {@Content(mediaType = "application/json",
@@ -117,12 +117,30 @@ public class UsersController {
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "User Not Found",
                     content = @Content),
-            @ApiResponse(responseCode = "401", description = "Need Access Key Token",
+            @ApiResponse(responseCode = "401", description = "Only Role Admin can do",
                     content = @Content)})
     @GetMapping("/deleteUser/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteUser(@PathVariable(name = "id") Long id) {
         usersService.deleteUser(id);
         return new ResponseEntity<>(String.format("User Id %s has been deleted", id),HttpStatus.OK);
+    }
+
+    @Operation(summary = "Add New User")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User Created",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CarsModel.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad URL Request",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "User Not Found",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Need Access Key",
+                    content = @Content)})
+    @GetMapping("/addNewUser")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER)")
+    public ResponseEntity<UsersModel> addNewUser(@RequestBody UsersModel usersModel) {
+        Users users = usersService.addNewUsers(usersModel.toEntity());
+        return new ResponseEntity<>(users.toModel(),HttpStatus.CREATED);
     }
 }

@@ -25,6 +25,7 @@ public class CarsService {
         long foundId = carsRepository.countId();
         cars.setId(foundId + 1);
         cars.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
+        cars.setVersion(1);
         return carsRepository.save(cars);
     }
 
