@@ -17,7 +17,7 @@ public class Constants {
     public static final String SECURED_WRITE_SCOPE = "#oauth2.hasScope('write')";
     public static final String SECURED_PATTERN = "/secured/**";
 
-    public ResultMessage created(String carName,
+    public static ResultMessage created(String carName,
                                  String model,
                                  String brand,
                                  String vehicleLicense){
@@ -27,17 +27,17 @@ public class Constants {
                 .brand(brand)
                 .vehicleLicense(vehicleLicense)
                 .message("New Car Added!!!")
-                .statusCode(this.CREATED).build();
+                .statusCode(CREATED).build();
     }
 
-    public ResultMessage failed(){
+    public static ResultMessage failed(){
         return ResultMessage.builder()
                 .carName(null)
                 .message("Something Wrong!!!")
-                .statusCode(this.ERROR).build();
+                .statusCode(ERROR).build();
     }
 
-    public ResultMessage updated(String carName,
+    public static ResultMessage updated(String carName,
                                  String model,
                                  String brand,
                                  String vehicleLicense){
@@ -47,10 +47,10 @@ public class Constants {
                 .brand(brand)
                 .vehicleLicense(vehicleLicense)
                 .message("Info of Car: ".concat(carName).concat("Has Been Updated"))
-                .statusCode(this.UPDATED).build();
+                .statusCode(UPDATED).build();
     }
 
-    public ResultMessage deleted(String carName,
+    public static ResultMessage deleted(String carName,
                                  String model,
                                  String brand,
                                  String vehicleLicense){
@@ -59,6 +59,6 @@ public class Constants {
                 .model(model)
                 .brand(brand).vehicleLicense(vehicleLicense)
                 .message("This Car ".concat(carName + " ").concat("Has been deleted!"))
-                .statusCode(this.DELETED).build();
+                .statusCode(DELETED).build();
     }
 }

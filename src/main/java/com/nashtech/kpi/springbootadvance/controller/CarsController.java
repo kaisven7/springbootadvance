@@ -35,9 +35,6 @@ public class CarsController {
     @Autowired
     private ShallowEtagHeaderFilter shallowEtagHeaderFilter;
 
-    @Autowired
-    private Constants constants;
-
     @Operation(summary = "Find All Cars")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found All Cars",
@@ -75,10 +72,10 @@ public class CarsController {
     public ResponseEntity<ResultMessage> addNewCar(@RequestBody CarsModel carsModel) {
         Cars temp = carsService.addNewCars(carsModel.toEntity());
         if (temp.equals(null)) {
-            ResultMessage result = constants.failed();
+            ResultMessage result = Constants.failed();
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         } else {
-            ResultMessage result = constants.created(temp.getName(),
+            ResultMessage result = Constants.created(temp.getName(),
                     temp.getModel(),
                     temp.getBrand(),
                     temp.getVehicleLicense());
@@ -164,15 +161,15 @@ public class CarsController {
         Long version = carsService.findByNameAndVehicleLicense(carsModel.getName(),
                 carsModel.getVehicleLicense()).getVersion();
         if (!eTag.equals(version.toString())) {
-            ResultMessage result = constants.failed();
+            ResultMessage result = Constants.failed();
             return new ResponseEntity<>(result, HttpStatus.PRECONDITION_FAILED);
         }
         Cars temp = carsService.updateCar(carsModel.toEntity());
         if (temp.equals(null)) {
-            ResultMessage result = constants.failed();
+            ResultMessage result = Constants.failed();
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         } else {
-            ResultMessage result = constants.updated(temp.getName(),
+            ResultMessage result = Constants.updated(temp.getName(),
                     temp.getModel(),
                     temp.getBrand(),
                     temp.getVehicleLicense());
@@ -195,7 +192,7 @@ public class CarsController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResultMessage> removeCar(@PathVariable(name = "id") Long id) {
         Cars deletedCar = carsService.deleteCar(id);
-        ResultMessage result = constants.deleted(deletedCar.getName(),
+        ResultMessage result = Constants.deleted(deletedCar.getName(),
                 deletedCar.getModel(),
                 deletedCar.getBrand(),
                 deletedCar.getVehicleLicense());

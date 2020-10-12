@@ -18,11 +18,20 @@ public class CarsService {
     @Autowired
     private CarsRepository carsRepository;
 
-    @Autowired
-    private Utilities utils;
+    public CarsRepository getCarsRepository() {
+        return carsRepository;
+    }
+
+    public void setCarsRepository(CarsRepository carsRepository) {
+        this.carsRepository = carsRepository;
+    }
 
     public Cars addNewCars (Cars cars) {
         long foundId = carsRepository.countId();
+        if(carsRepository.findByNameAndVehicleLicense(cars.getName(),cars.getVehicleLicense()).isPresent()) {
+            throw new CarsException(String.format("This Car %s and Car License %s already Exists!",
+                            cars.getName(),cars.getVehicleLicense()));
+        }
         cars.setId(foundId + 1);
         cars.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
         cars.setVersion(1);
@@ -58,14 +67,14 @@ public class CarsService {
     public Cars updateCar(Cars cars) {
         return carsRepository.findByNameAndVehicleLicense(cars.getName(),cars.getVehicleLicense()).map(
                 updateCar -> {
-                    updateCar.setName(utils.checkValue(updateCar.getName(),cars.getName()).toString());
-                    updateCar.setModel(utils.checkValue(updateCar.getModel(),cars.getModel()).toString());
-                    updateCar.setBrand(utils.checkValue(updateCar.getBrand(),cars.getBrand()).toString());
-                    updateCar.setType(utils.checkValue(updateCar.getType(),cars.getType()).toString());
-                    updateCar.setColor(utils.checkValue(updateCar.getColor(),cars.getColor()).toString());
-                    updateCar.setSeat(Integer.parseInt(utils.checkValue(updateCar.getSeat(),cars.getSeat()).toString()));
-                    updateCar.setCost(Long.parseLong(utils.checkValue(updateCar.getCost(),cars.getCost()).toString()));
-                    updateCar.setVehicleLicense(utils.checkValue(updateCar.getVehicleLicense(),cars.getVehicleLicense()).toString());
+                    updateCar.setName(Utilities.checkValue(updateCar.getName(),cars.getName()).toString());
+                    updateCar.setModel(Utilities.checkValue(updateCar.getModel(),cars.getModel()).toString());
+                    updateCar.setBrand(Utilities.checkValue(updateCar.getBrand(),cars.getBrand()).toString());
+                    updateCar.setType(Utilities.checkValue(updateCar.getType(),cars.getType()).toString());
+                    updateCar.setColor(Utilities.checkValue(updateCar.getColor(),cars.getColor()).toString());
+                    updateCar.setSeat(Integer.parseInt(Utilities.checkValue(updateCar.getSeat(),cars.getSeat()).toString()));
+                    updateCar.setCost(Long.parseLong(Utilities.checkValue(updateCar.getCost(),cars.getCost()).toString()));
+                    updateCar.setVehicleLicense(Utilities.checkValue(updateCar.getVehicleLicense(),cars.getVehicleLicense()).toString());
                     updateCar.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
                     return carsRepository.save(updateCar);
                 })

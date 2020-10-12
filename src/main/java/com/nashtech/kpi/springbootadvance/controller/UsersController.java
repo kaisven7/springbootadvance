@@ -140,7 +140,7 @@ public class UsersController {
     @GetMapping("/addNewUser")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER)")
     public ResponseEntity<UsersModel> addNewUser(@RequestBody UsersModel usersModel) {
-        Users users = usersService.addNewUsers(usersModel.toEntity());
+        Users users = usersService.addNewUser(usersModel.toEntity());
         return new ResponseEntity<>(users.toModel(),HttpStatus.CREATED);
     }
 }
